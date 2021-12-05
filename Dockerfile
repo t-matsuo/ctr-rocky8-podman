@@ -1,4 +1,4 @@
-FROM rockylinux/rockylinux:8.4
+FROM rockylinux/rockylinux:8.5
 LABEL maintainer="matsuo.tak@gmail.com"
 
 RUN echo "keepcache=True" >> /etc/dnf/dnf.conf
@@ -33,7 +33,9 @@ RUN useradd podman; \
     echo podman:10000:65536 > /etc/subuid; \
     echo podman:10000:65536 > /etc/subgid; \
     mkdir -p /home/podman/.local/share/containers; \
-    mkdir -p /home/podman/.config/cni
+    mkdir -p /home/podman/.config/cni && \
+    chmod 4755 /usr/bin/newuidmap && \
+    chmod 4755 /usr/bin/newgidmap
 
 COPY podman-containers.conf /home/podman/.config/containers/containers.conf
 RUN  chown podman:podman -R /home/podman
